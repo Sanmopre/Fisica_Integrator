@@ -18,8 +18,5 @@
     <ClCompile Include="..\..\..\..\..\Desktop\Integrador-2.cpp">
       <Filter>Archivos de recursos</Filter>
     </ClCompile>
-    <ClCompile Include="Integrador.cpp">
-      <Filter>Archivos de recursos</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,14 +8,15 @@ void Euler_Integrator(float& pos, float& vel, float& a, float& dt) {
 
 int main()
 {
+
 	float pos = 0;
 	float vel = 5;
 	float a = 0;
 	float dt = (1.0f / 30.0f);
+	cout << "||   Euler_Integrator   ||" << endl << endl;
 
 	Euler_Integrator(pos, vel, a, dt);
 	cout << pos << endl << vel << endl << a << endl;
-
 	Euler_Integrator(pos, vel, a, dt);
 	cout << pos << endl << vel << endl << a;
 

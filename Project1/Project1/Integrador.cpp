@@ -16,9 +16,13 @@ int main()
 	cout << "||   Euler_Integrator   ||" << endl << endl;
 
 	Euler_Integrator(pos, vel, a, dt);
-	cout << pos << endl << vel << endl << a << endl;
+	cout << "position: " << pos << endl;
+	cout << "velocity: " << vel << endl;
+	cout << "acceleration: " << a << endl;
 	Euler_Integrator(pos, vel, a, dt);
-	cout << pos << endl << vel << endl << a;
+	cout << "position 2: " << pos << endl;
+	cout << "velocity 2: " << vel << endl;
+	cout << "acceleration 2: "<< a << endl;
 
 
 	system("pause");

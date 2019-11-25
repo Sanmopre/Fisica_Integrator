@@ -6,6 +6,8 @@ void Euler_Integrator(float& pos, float& vel, float& a, float& dt) {
 	vel += a * dt;
 }
 
+
+
 int main()
 {
 
@@ -13,7 +15,12 @@ int main()
 	float vel = 5;
 	float a = 0;
 	float dt = (1.0f / 30.0f);
-	cout << "||   Euler_Integrator   ||" << endl << endl;
+	
+	float posy = 0;
+	float vely = 5;
+	float g = 10;
+	
+	cout << "||   Euler Integrator   ||" << endl << endl;
 
 	Euler_Integrator(pos, vel, a, dt);
 	cout << "position: " << pos << endl;
@@ -22,7 +29,23 @@ int main()
 	Euler_Integrator(pos, vel, a, dt);
 	cout << "position 2: " << pos << endl;
 	cout << "velocity 2: " << vel << endl;
-	cout << "acceleration 2: "<< a << endl;
+	cout << "acceleration 2: " << a << endl << endl;
+	cout << "--------------------------------------------------------" << endl;
+	cout << "Case of a falling object" << endl;
+	Euler_Integrator(posy, vely, g, dt);
+	cout << "position Y: " << posy << endl;
+	cout << "velocity Y: " << vely << endl;
+	cout << "gravity: " << g << endl;
+	Euler_Integrator(posy, vely, g, dt);
+	cout << "position Y: " << posy << endl;
+	cout << "velocity Y: " << vely << endl;
+	cout << "gravity: " << g << endl;
+	
+	
+
+
+
+
 
 
 	system("pause");

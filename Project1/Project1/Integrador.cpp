@@ -14,10 +14,10 @@ int main()
 	cout << "Introduce framerate:";
 	cin >> framerate;
 	cout<<endl;
-	//For the case an object moves in the X-axis with a=0
+	//For the case an object moves in the X-axis 
 	float posx = 0;
 	float velx = 5;
-	float a = 8;
+	float ax = 8;
 	float dt = (1.0f / framerate);
 	
 	//For the case an object moves in the Y-axis
@@ -35,7 +35,7 @@ int main()
 	float Cd = 0.47f;
 	float Fd = 0.5f * airdensity * (velc * velc) * area * (Cd);
 	float adrag = Fd / mass;
-	float ac = a - adrag;
+	float ac = ax - adrag;
 	//bullet case
 	float posb = 0;
 	float velb = 5;
@@ -49,14 +49,14 @@ int main()
 	
 	cout << "||   Euler Integrator   ||" << endl << endl;
 
-	Euler_Integrator(posx, velx, a, dt);
+	Euler_Integrator(posx, velx, ax, dt);
 	cout << "position: " << posx << endl;
 	cout << "velocity: " << velx << endl;
-	cout << "Constant acceleration: " << a << endl<<endl;
-	Euler_Integrator(posx, velx, a, dt);
+	cout << "Constant acceleration: " << ax << endl<<endl;
+	Euler_Integrator(posx, velx, ax, dt);
 	cout << "position next frame: " << posx << endl;
 	cout << "velocity next frame: " << velx << endl;
-	cout << "Constant acceleration: " << a << endl << endl;
+	cout << "Constant acceleration: " << ax << endl << endl;
 	cout << "--------------------------------------------------------" << endl;
 	cout << "Case of a falling object" << endl;
 	Euler_Integrator(posy, vely, g, dt);

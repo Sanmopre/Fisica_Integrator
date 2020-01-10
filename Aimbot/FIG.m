@@ -196,13 +196,14 @@ function buttonaimbot_Callback(hObject, eventdata, handles)
 % hObject    handle to buttonaimbot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-%delete(shooter);
-%delete(target);
+%deleting trajectory, shooter and target from the preavious aimbot
 if(handles.deletesquares)
-for j=1:handles.k-1
-   delete(handles.trajectory(j)); 
-end
+    for j=1:handles.k-1
+        delete(handles.trajectory(j));
+    end
+    delete(handles.bullet);
+    delete(handles.target);
+    delete(handles.shooter);
 end
 handles.deletesquares=1;
 framerate=str2double(get(handles.frameratetext,'String'));
@@ -211,12 +212,12 @@ sx=str2double(get(handles.SX,'String'));
 sy=str2double(get(handles.SY,'String'));
 tx=str2double(get(handles.TX,'String'));
 ty=str2double(get(handles.TY,'String'));
-shooter=rectangle('Position',[sx sy 0.5 0.5]);
-target=rectangle('Position',[tx ty 0.5 0.5]);
-bullet=rectangle('Position',[sx sy 0.1 0.1]);
-shooterrect=get(shooter,'Position');
-targetrect=get(target,'Position');
-bulletrect=get(bullet,'Position');
+handles.shooter=rectangle('Position',[sx sy 0.5 0.5]);
+handles.target=rectangle('Position',[tx ty 0.5 0.5]);
+handles.bullet=rectangle('Position',[sx sy 0.1 0.1]);
+shooterrect=get(handles.shooter,'Position');
+targetrect=get(handles.target,'Position');
+bulletrect=get(handles.bullet,'Position');
 a=[-5,-9.81];
 exit=0;
 if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2)<=10 && 0<=targetrect(1) && targetrect(1)<=20 && 0<=targetrect(2) && targetrect(2)<=10 && framerate>0)
@@ -238,7 +239,7 @@ if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2
             break;
         end
         end
-        bulletrect=get(bullet,'Position');
+        bulletrect=get(handles.bullet,'Position');
         if(exit==1)
             break;
         end

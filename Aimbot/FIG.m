@@ -53,6 +53,8 @@ function FIG_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to FIG (see VARARGIN)
 xlabel('Position x(m)');
 ylabel('Position y(m)');
+handles.k=1;
+handles.deletesquares=0;
 % Choose default command line output for FIG
 handles.output = hObject;
 
@@ -197,6 +199,12 @@ function buttonaimbot_Callback(hObject, eventdata, handles)
 
 %delete(shooter);
 %delete(target);
+if(handles.deletesquares)
+for j=1:handles.k-1
+   delete(handles.trajectory(j)); 
+end
+end
+handles.deletesquares=1;
 framerate=str2double(get(handles.frameratetext,'String'));
 dt=1/framerate;
 sx=str2double(get(handles.SX,'String'));
@@ -225,6 +233,7 @@ if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2
             v0f=v0;
             anglef=angle;
             fiterations=iterations;
+            frames=i;
             exit=1;
             break;
         end
@@ -237,6 +246,29 @@ if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2
     set(handles.Iterations,'String',num2str(fiterations));
     set(handles.AngleText,'String',num2str(anglef));
     set(handles.V0Text,'String',num2str(v0f));
+    bx=sx;
+    by=sy;
+    bvx=v0f*cosd(anglef);
+    bvy=v0f*sind(anglef);
+    for k=0:frames
+        %Euler integrator
+        bvx=bvx+a(1)*dt;
+        %if(bx>20)
+            %bvx=-bvx;
+        %elseif(bx<0)
+            %bvx=-bvx;
+        %end
+        bvy=bvy+a(2)*dt;
+        %if(by>10)
+            %bvy=-bvy;
+        %elseif(by<0)
+            %bvy=-bvy;
+        %end
+        bx=bx+bvx*dt;
+        by=by+bvy*dt;
+        handles.trajectory(handles.k)=rectangle('Position',[bx by 0.1 0.1]);
+        handles.k=handles.k+1;
+    end
 else
     disp('Wrong inputs, chek info');
 end

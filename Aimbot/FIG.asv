@@ -53,6 +53,7 @@ function FIG_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to FIG (see VARARGIN)
 xlabel('Position x(m)');
 ylabel('Position y(m)');
+handles.k=1;
 % Choose default command line output for FIG
 handles.output = hObject;
 
@@ -197,6 +198,11 @@ function buttonaimbot_Callback(hObject, eventdata, handles)
 
 %delete(shooter);
 %delete(target);
+if(handles.deletesquares)
+for j=1:handles.k
+   delete(handles.trajectory(j)); 
+end
+end
 framerate=str2double(get(handles.frameratetext,'String'));
 dt=1/framerate;
 sx=str2double(get(handles.SX,'String'));
@@ -212,27 +218,54 @@ bulletrect=get(bullet,'Position');
 a=[-5,-9.81];
 exit=0;
 if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2)<=10 && 0<=targetrect(1) && targetrect(1)<=20 && 0<=targetrect(2) && targetrect(2)<=10 && framerate>0)
-    disp('hellow world')
-    bulletpos=[shooterrect(1),shooterrect(2)];
     for iterations=0:1000
     v0=rand*100;
     angle=rand*100;
-    bulletv = v0*[cosd(angle);sind(angle)];
+    bulletv = v0*[cosd(angle) sind(angle)];
         for i=0:1000
         %Euler integrator
         bulletv=bulletv+a*dt;
-        bulletrect=bulletrect+bulletv*dt;
-        if(targetrect(1) < bulletrect(1) + bulletrect(1) && targetrect(1) + targetrect(3) > bulletrect(1) && targetrect(2) < bulletrect(2) + bulletrect(4) && targetrect(2) + targetrect(4) > bulletrect(2))
+        bulletrect(1)=bulletrect(1)+bulletv(1)*dt;
+        bulletrect(2)=bulletrect(2)+bulletv(2)*dt;
+        if(targetrect(1) < bulletrect(1) + bulletrect(3) && targetrect(1) + targetrect(3) > bulletrect(1) && targetrect(2) < bulletrect(2) + bulletrect(4) && targetrect(2) + targetrect(4) > bulletrect(2))
             v0f=v0;
             anglef=angle;
             fiterations=iterations;
+            frames=i;
             exit=1;
             break;
         end
         end
+        bulletrect=get(bullet,'Position');
         if(exit==1)
             break;
         end
+    end
+    set(handles.Iterations,'String',num2str(fiterations));
+    set(handles.AngleText,'String',num2str(anglef));
+    set(handles.V0Text,'String',num2str(v0f));
+    bx=sx;
+    by=sy;
+    bvx=v0f*cosd(anglef);
+    bvy=v0f*sind(anglef);
+    for k=0:frames
+        %Euler integrator
+        bvx=bvx+a(1)*dt;
+        %if(bx>20)
+            %bvx=-bvx;
+        %elseif(bx<0)
+            %bvx=-bvx;
+        %end
+        bvy=bvy+a(2)*dt;
+        %if(by>10)
+            %bvy=-bvy;
+        %elseif(by<0)
+            %bvy=-bvy;
+        %end
+        bx=bx+bvx*dt;
+        by=by+bvy*dt;
+        handles.trajectory(handles.k)=rectangle('Position',[bx by 0.1 0.1]);
+        handles.k=handles.k+1;
     end
 else
     disp('Wrong inputs, chek info');

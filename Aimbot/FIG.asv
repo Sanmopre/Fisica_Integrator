@@ -201,13 +201,16 @@ if(handles.deletesquares)
     for j=1:handles.k-1
         delete(handles.trajectory(j));
     end
-    delete(handles.bullet)
-    delete(handles.target)
-    delete
+    delete(handles.bullet);
+    delete(handles.target);
+    delete(handles.shooter);
 end
+%flag to know if this is the first aimbot after appluication start
 handles.deletesquares=1;
+%getting input framerate and calculating dt
 framerate=str2double(get(handles.frameratetext,'String'));
 dt=1/framerate;
+%getting shooter,target and bullet inputs and drawing them
 sx=str2double(get(handles.SX,'String'));
 sy=str2double(get(handles.SY,'String'));
 tx=str2double(get(handles.TX,'String'));
@@ -218,19 +221,25 @@ handles.bullet=rectangle('Position',[sx sy 0.1 0.1]);
 shooterrect=get(handles.shooter,'Position');
 targetrect=get(handles.target,'Position');
 bulletrect=get(handles.bullet,'Position');
+%setting defaut acceleration ('wind' force makes ax -5 by default and ay=to gravity)
 a=[-5,-9.81];
+%exit loops flag
 exit=0;
+%checking user inputs are within the bounderies of the graph
 if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2)<=10 && 0<=targetrect(1) && targetrect(1)<=20 && 0<=targetrect(2) && targetrect(2)<=10 && framerate>0)
-    for iterations=0:1000
+    %performing 5000 tries of MonteCarlo algorithm(tries to hit target with random initial bullet velocity and shot angle)
+    for iterations=0:5000
     v0=rand*100;
     angle=rand*100;
     bulletv = v0*[cosd(angle) sind(angle)];
         for i=0:1000
-        %Euler integrator
+        %Euler integrator helps calculate the position of the bullet every frame
         bulletv=bulletv+a*dt;
         bulletrect(1)=bulletrect(1)+bulletv(1)*dt;
         bulletrect(2)=bulletrect(2)+bulletv(2)*dt;
+        %checking if bullet collides with target
         if(targetrect(1) < bulletrect(1) + bulletrect(3) && targetrect(1) + targetrect(3) > bulletrect(1) && targetrect(2) < bulletrect(2) + bulletrect(4) && targetrect(2) + targetrect(4) > bulletrect(2))
+            %if the collision is produced we exit loops and save the initial velocity and angle of the succesful shot
             v0f=v0;
             anglef=angle;
             fiterations=iterations;
@@ -244,13 +253,16 @@ if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2
             break;
         end
     end
+    %We update the ui of the user with the info of the correct shoot
     set(handles.Iterations,'String',num2str(fiterations));
     set(handles.AngleText,'String',num2str(anglef));
     set(handles.V0Text,'String',num2str(v0f));
+    %we calculate the trajectory of the succesful shot
     bx=sx;
     by=sy;
     bvx=v0f*cosd(anglef);
     bvy=v0f*sind(anglef);
+    %we draw the correct shot trajectory using a loop that draws the position of the bullet in each frame
     for k=0:frames
         %Euler integrator
         bvx=bvx+a(1)*dt;
@@ -270,6 +282,7 @@ if(0<=shooterrect(1) && shooterrect(1)<=20 && 0<=shooterrect(2) && shooterrect(2
         handles.trajectory(handles.k)=rectangle('Position',[bx by 0.1 0.1]);
         handles.k=handles.k+1;
     end
+%If the user input is not within the graph buonderies we don't do the aimbot
 else
     disp('Wrong inputs, chek info');
 end
